@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="167" height="74" viewBox="0 0 167 74">
+  <g id="main-logo" transform="translate(-100 -316)">
+    <g id="Group_1" data-name="Group 1" transform="translate(-8.84 -17.653)">
+      <text id="Кровь" transform="translate(108.84 382.653)" fill="#f7f7f7" font-size="53" font-family="Georgia-Bold, Georgia" font-weight="700"><tspan x="0" y="0">кровь</tspan></text>
+      <text id="общий_анализ" data-name="общий анализ" transform="translate(170.84 402.653)" fill="#fff" font-size="18" font-family="RobotoCondensed-Light, Roboto" font-weight="300"><tspan x="0" y="0">общий анализ</tspan></text>
+      <path id="Path_1" data-name="Path 1" d="M5.119-6.081s4.66,6.71,4.66,9.319A4.5,4.5,0,0,1,5.119,7.9,4.5,4.5,0,0,1,.46,3.238C.46.629,5.119-6.081,5.119-6.081Z" transform="translate(189.503 341.437)" fill="#f7f7f7"/>
+    </g>
+    <rect id="Rectangle_1" data-name="Rectangle 1" width="12" height="24" transform="translate(180 340)" fill="#f7f7f7"/>
+  </g>
+</svg>
