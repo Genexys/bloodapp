@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     button: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: 300,
+        alignSelf: 'stretch',
         height: 50,
         borderRadius: 4,
         backgroundColor: '#ffffff',

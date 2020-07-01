@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function InputItemCalculate({short, long}) {
+export default function InputItemResult({short, long}) {
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
@@ -52,10 +52,7 @@ export default function InputItemCalculate({short, long}) {
             </View>
 
             <View style={styles.inputContainer}>
-                <Text
-                    placeholder={'0'}
-
-                >
+                <Text style={styles.input}>
                 31,1
                 </Text>
             </View>

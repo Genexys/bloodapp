@@ -12,40 +12,41 @@ const styles = StyleSheet.create({
     },
 
     containerInput: {
-        width: 300,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
 
     containerAge: {
-        width: 220,
+        flex: 4,
     },
 
     containerMonth: {
-        width: 60,
+        flex: 1,
+        marginLeft: 15,
     },
 
     containerBtn: {
+        alignSelf: 'stretch',
         marginTop: 50,
     }
 });
 
-export default function MainForm({navigation}) {
+export default function MainForm({navigation, typeForm}) {
     return (
-        <View style={styles.container}>
-            <Dropdown />
+        <View style={styles.container} >
+            <Dropdown color={typeForm}/>
             <View style={styles.containerInput}>
                 <View style={styles.containerAge}>
-                    <Input type={'age'} placeholder={'Возраст'}/>
+                    <Input type={'age'} placeholder={'Возраст'} color={typeForm}/>
                 </View>
                 <View style={styles.containerMonth}>
-                    <Input type={'month'} placeholder={'Мес'}/>
+                    <Input type={'month'} placeholder={'Мес'} color={typeForm}/>
                 </View>
             </View>
 
-            <View style={styles.containerBtn}>
+            {typeForm !== 'setting' ? <View style={styles.containerBtn}>
                 <ButtonMain navigation={navigation}/>
-            </View>
+            </View> : null}
         </View>
     );
 }

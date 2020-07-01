@@ -1,13 +1,14 @@
 import React from 'react';
 import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import MainLogo from '../../Icon/MainLogo';
-import MainForm from '../MainForm/MainForm';
+import MainLogo from '../Icon/MainLogo';
+import MainForm from '../components/MainForm/MainForm';
 
 const style = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 36,
         backgroundColor: '#3B84BE',
     },
 

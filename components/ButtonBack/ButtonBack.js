@@ -20,7 +20,7 @@ export default function ButtonBack({navigation}) {
 
     return(
         <TouchableOpacity style={style.buttonPrev} onPress={navigation.goBack}>
-            <ArrowPrev/>
+            <ArrowPrev width={12} height={20}/>
             <Text style={style.buttonPrevText}>
                 Скрыть
             </Text>

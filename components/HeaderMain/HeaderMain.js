@@ -1,12 +1,19 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import ButtonBack from '../ButtonBack/ButtonBack';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import IconMenu from '../../Icon/IconMenu';
+import MainLogo from '../../Icon/MainLogo';
 
-export default function Header({navigation}) {
+
+export default function HeaderMain({navigation}) {
     return (
         <View style={styles.header}>
-            <View>
-                <ButtonBack navigation={navigation}/>
+            <View style={styles.container}>
+                <TouchableOpacity onPress={() => {navigation.navigate('Настройки')}}>
+                    <IconMenu />
+                </TouchableOpacity>
+
+                <MainLogo width={87} height={25}/>
+
             </View>
         </View>
     )
@@ -14,7 +21,16 @@ export default function Header({navigation}) {
 
 const styles = StyleSheet.create({
     header: {
-        paddingTop: 15,
-        paddingLeft: 10,
+        height: 50,
+        paddingRight: 20,
+        paddingLeft: 35,
+        backgroundColor: '#3B84BE',
     },
+
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: 50,
+    }
 });

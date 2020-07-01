@@ -1,6 +1,5 @@
 import React from 'react';
 import {Text, ScrollView, View, StyleSheet, TouchableOpacity} from 'react-native';
-import ArrowPrev from '../../Icon/ArrowPrev';
 
 const style = StyleSheet.create({
     container: {
