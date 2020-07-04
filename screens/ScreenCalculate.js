@@ -63,13 +63,12 @@ export default function ScreenCalculate({navigation}) {
 
     return (
         <View>
-            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} onPress={() => navigation.navigate('Результат')}>
                 <View style={styles.containerInner}>
                     {analyzes.map((el, index) => <InputItemCalculate key={index} short={el[0]} long={el[1]}/>)}
                 </View>
                 <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}
-                          onPress={() => navigation.navigate('Результат')}>
+                    <Text style={styles.buttonText}>
                         Получить результат
                     </Text>
                 </TouchableOpacity>

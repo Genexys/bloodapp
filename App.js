@@ -1,12 +1,14 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Platform, Picker} from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MainScreen from './screens/MainScreen';
 import Terms from './screens/Terms';
 import SettingsScreen from './screens/SettingsScreen';
-import Header from './components/HeaderTerms/Header';
+import HeaderTerms from './components/HeaderTerms/HeaderTerms';
 import HeaderMain from './components/HeaderMain/HeaderMain';
 import ScreenCalculate from './screens/ScreenCalculate';
 import ScreenResult from "./screens/ScreenResult";
+import ButtonBack from "./components/ButtonBack/ButtonBack";
 
 import * as SplahScreen from "expo-splash-screen";
 import {createStackNavigator, TransitionPresets, CardStyleInterpolators} from "@react-navigation/stack";
@@ -16,20 +18,7 @@ import {Asset} from 'expo-asset';
 import {AppLoading} from 'expo';
 
 
-
 const Stack = createStackNavigator();
-
-const config = {
-    animation: 'spring',
-    config: {
-        stiffness: 1000,
-        damping: 300,
-        mass: 3,
-        overshootClamping: false,
-        restDisplacementThreshold: 0.01,
-        restSpeedThreshold: 0.01,
-    },
-};
 
 const styles = StyleSheet.create({
     container: {
@@ -42,12 +31,17 @@ const styles = StyleSheet.create({
 
 const StackMenu = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Главная">
             <Stack.Screen options={{headerShown: false}} name="Главная" component={MainScreen}/>
+
             <Stack.Screen options={({navigation}) => ({
-                header: (props) => (
-                    <Header navigation={navigation} {...props}/>
-                ),
+                // header: (props) => (
+                //     <HeaderTerms navigation={navigation} {...props}/>
+                // ),
+
+                headerLeft: props => <ButtonBack {...props} navigation={navigation} />,
+                headerTitle: '',
+
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
             })} name="Пользовательское соглашение" component={Terms}/>
 
@@ -63,12 +57,12 @@ const StackMenu = () => {
                 header: (props) => (
                     <HeaderMain navigation={navigation} {...props}/>
                 ),
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+                // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
             })} name="Результат" component={ScreenResult}/>
 
             <Stack.Screen options={({navigation}) => ({
                 header: (props) => (
-                    <Header navigation={navigation} {...props}/>
+                    <HeaderTerms navigation={navigation} {...props}/>
                 ),
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
             })} name="Настройки" component={SettingsScreen}/>
@@ -94,7 +88,7 @@ export default function App() {
 
     if (isReady) {
         return (
-            <Fragment>
+            <SafeAreaProvider>
                 {/*{Platform.OS === 'ios' && <StatusBar style="dark"/>}*/}
 
                 <NavigationContainer>
@@ -102,7 +96,7 @@ export default function App() {
                     <StackMenu/>
                 </NavigationContainer>
 
-            </Fragment>
+            </SafeAreaProvider>
         );
     } else {
         return (

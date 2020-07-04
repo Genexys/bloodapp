@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Dropdown from '../Dropdown/Dropdown';
+import DropdownEl from '../Dropdown/Dropdown';
 import ButtonMain from '../ButtonMain/ButtonMain';
 import Input from '../Input/Input';
 
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
 export default function MainForm({navigation, typeForm}) {
     return (
         <View style={styles.container} >
-            <Dropdown color={typeForm}/>
+            <DropdownEl color={typeForm}/>
+
             <View style={styles.containerInput}>
                 <View style={styles.containerAge}>
                     <Input type={'age'} placeholder={'Возраст'} color={typeForm}/>
