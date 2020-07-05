@@ -2,15 +2,10 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Chevron} from 'react-native-shapes';
 import {Ionicons} from '@expo/vector-icons';
-import {Picker} from '@react-native-community/picker';
-import RNPickerSelect from 'react-native-picker-select';
 import { Dropdown } from "react-native-material-dropdown";
 
 
-export default function DropdownEl({color}) {
-    const [gender, setGender] = useState({
-        ddlSelectedValue:1
-    });
+export default function DropdownEl({color, value, onChange}) {
 
     let myFavouriteActors = [{
         label: 'Tommy Wiseau',
@@ -56,8 +51,6 @@ export default function DropdownEl({color}) {
             color: (color !== 'setting') ? '#ffffff' : '#014F80',
         }
     });
-
-    console.log(gender)
 
     const placeholder = {
         label: 'Select a sport...',
@@ -133,7 +126,16 @@ export default function DropdownEl({color}) {
             {/*    }}*/}
             {/*/>*/}
 
-            <Dropdown data={myFavouriteActors} value={gender.ddlSelectedValue} itemColor={'#3B84BE'} baseColor={(color !== 'setting') ? '#ffffff' : '#014F80'} selectedItemColor={'#000000'} textColor={(color !== 'setting') ? '#ffffff' : '#014F80'} itemPadding={5} inputContainerStyle={{ borderBottomColor: 'transparent', paddingVertical: 0, margin: 0 }} containerStyle = {{padding: 0, margin: 0}} labelPadding={0} useNativeDriver={true} onChangeText={(value,index,data)=>setGender({ddlSelectedValue: value})} />
+            <Dropdown data={myFavouriteActors} value={value}
+                      itemColor={'#3B84BE'}
+                      baseColor={(color !== 'setting') ? '#ffffff' : '#014F80'}
+                      selectedItemColor={'#000000'} textColor={(color !== 'setting') ? '#ffffff' : '#014F80'}
+                      itemPadding={5}
+                      inputContainerStyle={{ borderBottomColor: 'transparent', paddingVertical: 0, margin: 0 }}
+                      containerStyle = {{padding: 0, margin: 0}}
+                      labelPadding={0}
+                      useNativeDriver={true}
+                      onChangeText={(value)=>onChange(value)} />
 
         </View>
     );

@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function ButtonMain({navigation}) {
+export default function ButtonMain({onPress}) {
     return (
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Форма расчета')}>
+        <TouchableOpacity style={styles.button} onPress={onPress}>
             <Text style={styles.buttonText}>
                 начать
             </Text>

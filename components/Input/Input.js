@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 
-export default function Input({placeholder, color}) {
+export default function Input({placeholder, color, ...props}) {
 
     const styles = StyleSheet.create({
 
@@ -25,6 +25,7 @@ export default function Input({placeholder, color}) {
                 placeholder={placeholder}
                 style={styles.input}
                 keyboardType={'numeric'}
+                {...props}
             />
         </View>
     );

@@ -1,5 +1,8 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, Platform, Picker} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import { Provider } from 'react-redux';
+import store, { persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MainScreen from './screens/MainScreen';
 import Terms from './screens/Terms';
@@ -35,36 +38,34 @@ const StackMenu = () => {
             <Stack.Screen options={{headerShown: false}} name="Главная" component={MainScreen}/>
 
             <Stack.Screen options={({navigation}) => ({
-                // header: (props) => (
-                //     <HeaderTerms navigation={navigation} {...props}/>
-                // ),
 
                 headerLeft: props => <ButtonBack {...props} navigation={navigation} />,
                 headerTitle: '',
 
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                gestureEnabled: false
             })} name="Пользовательское соглашение" component={Terms}/>
 
             <Stack.Screen options={({navigation}) => ({
                 header: (props) => (
-                    <HeaderMain navigation={navigation} {...props}/>
+                    <HeaderMain {...props}/>
                 ),
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                gestureEnabled: false
             })} name="Форма расчета" component={ScreenCalculate}/>
 
 
             <Stack.Screen options={({navigation}) => ({
                 header: (props) => (
-                    <HeaderMain navigation={navigation} {...props}/>
+                    <HeaderMain {...props}/>
                 ),
-                // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
             })} name="Результат" component={ScreenResult}/>
 
             <Stack.Screen options={({navigation}) => ({
-                header: (props) => (
-                    <HeaderTerms navigation={navigation} {...props}/>
-                ),
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+                headerLeft: props => <ButtonBack {...props} navigation={navigation} />,
+                headerTitle: '',
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             })} name="Настройки" component={SettingsScreen}/>
         </Stack.Navigator>
     )
@@ -88,15 +89,19 @@ export default function App() {
 
     if (isReady) {
         return (
-            <SafeAreaProvider>
-                {/*{Platform.OS === 'ios' && <StatusBar style="dark"/>}*/}
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <SafeAreaProvider>
+                        {/*{Platform.OS === 'ios' && <StatusBar style="dark"/>}*/}
 
-                <NavigationContainer>
-                    <StatusBar hidden/>
-                    <StackMenu/>
-                </NavigationContainer>
+                        <NavigationContainer>
+                            <StatusBar hidden/>
+                            <StackMenu/>
+                        </NavigationContainer>
 
-            </SafeAreaProvider>
+                    </SafeAreaProvider>
+                </PersistGate>
+            </Provider>
         );
     } else {
         return (
