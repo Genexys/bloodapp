@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import {Text, ScrollView, View, StyleSheet, TouchableOpacity, Switch} from 'react-native';
 import Dash from 'react-native-dash';
 import MainForm from '../components/MainForm/MainForm';
-// import ToggleSwitch from 'toggle-switch-react-native'
-import {Picker} from '@react-native-community/picker';
-import ArrowPrev from "../Icon/ArrowPrev";
+import { useFonts } from 'expo-font';
 import ArrowNext from "../Icon/ArrowNext";
 
 const style = StyleSheet.create({
+
+    containerWrapper: {
+        flex: 1,
+        backgroundColor: '#ffffff'
+    },
+
     container: {
         padding: 36,
     },
@@ -64,12 +68,15 @@ export default function SettingsScreen({ navigation }) {
 
     const [darkTheme, setDarkThem] = useState(false)
     const [unitValue, setUnitValue] = useState(null);
+    const [loaded] = useFonts({
+        Georgia: require('../assets/fonts/Georgia.ttf'),
+    });
 
     return (
-        <ScrollView>
-            <View>
+        <ScrollView contentContainerStyle={style.containerWrapper} showsVerticalScrollIndicator={false}>
+            <View flex={1}>
                 <View style={style.container}>
-                    <Text style={style.title}>
+                    <Text style={[style.title, { fontFamily: 'Georgia' }]}>
                         Настройки
                     </Text>
 
@@ -99,6 +106,7 @@ export default function SettingsScreen({ navigation }) {
                     <TouchableOpacity
                         style={style.buttonTerms}
                         onPress={() => navigation.navigate('Пользовательское соглашение')}
+                        hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     >
                         <Text style={style.buttonTermsText}>Пользовательское соглашение</Text>
 

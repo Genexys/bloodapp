@@ -2,24 +2,29 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Chevron} from 'react-native-shapes';
 import {Ionicons} from '@expo/vector-icons';
-import { Dropdown } from "react-native-material-dropdown";
+import {Dropdown} from "react-native-material-dropdown";
 
 
-export default function DropdownEl({color, value, onChange}) {
+export default function DropdownEl({color, value, onChange, getValidate}) {
 
-    let myFavouriteActors = [{
-        label: 'Tommy Wiseau',
-        value: 1
-    }, {
-        label: 'Arnold Schwarzenneger',
-        value: 2
-    }, {
-        label: 'Donald Glover',
-        value: 3
-    },
+    let values = [
         {
-            label: 'Emma Stone',
-            value: 4
+            label: 'Новорожденный',
+            value: 'Новорожденный'
+        }, {
+            label: 'Ребёнок',
+            value: 'Ребёнок'
+        }, {
+            label: 'Женщина',
+            value: 'Женщина'
+        },
+        {
+            label: 'Женщина в положении',
+            value: 'Женщина в положении'
+        },
+        {
+            label: 'Мужчина',
+            value: 'Мужчина'
         }
     ]
 
@@ -31,7 +36,6 @@ export default function DropdownEl({color, value, onChange}) {
             marginBottom: 30,
             padding: 0,
             borderBottomWidth: 1,
-            borderBottomColor: (color !== 'setting') ? '#ffffff' : '#014F80',
         },
 
         pickerContainer: {
@@ -58,84 +62,23 @@ export default function DropdownEl({color, value, onChange}) {
         color: '#9EA0A4',
     };
 
-    const sports = [
-        {
-            label: 'Football',
-            value: 'football',
-        },
-        {
-            label: 'Baseball',
-            value: 'baseball',
-        },
-        {
-            label: 'Hockey',
-            value: 'hockey',
-        },
-    ];
-
     return (
-        <View style={style.container}>
-            {/*<Picker*/}
-            {/*    selectedValue={gender}*/}
-            {/*    style={style.pickerContainer}*/}
-            {/*    placeholder={{}}*/}
-            {/*    onValueChange={(itemValue, itemIndex) =>*/}
-            {/*        setGender(itemValue)*/}
-            {/*    }*/}
-            {/*    itemStyle={{*/}
-            {/*        height: 50,*/}
-            {/*        padding: 0,*/}
-            {/*        backgroundColor: 'transparent',*/}
-            {/*        color: '#ffffff',*/}
-            {/*    }}*/}
+        <View style={[style.container, {borderBottomColor: (color !== 'setting') ? '#ffffff' : '#014F80'}]}>
 
-            {/*    itemTextStyle={{*/}
-            {/*        padding: 0,*/}
-            {/*        color: '#ffffff',*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <Picker.Item label="Мужчина" value="Мужчина" />*/}
-            {/*    <Picker.Item label="Женщина" value="Женщина" />*/}
-            {/*    <Picker.Item label="Женщина в положении" value="Женщина в положении" />*/}
-            {/*    <Picker.Item label="Рёбенок" value="Рёбенок" />*/}
-            {/*    <Picker.Item label="Новорожденный" value="Новорожденный" />*/}
-            {/*</Picker>*/}
-
-            {/*<RNPickerSelect*/}
-            {/*    placeholder={placeholder}*/}
-            {/*    items={sports}*/}
-            {/*    onValueChange={value => {*/}
-            {/*        setGender({*/}
-            {/*            favSport3: value,*/}
-            {/*        })*/}
-            {/*    }}*/}
-            {/*    style={{*/}
-            {/*        inputAndroid: {*/}
-            {/*            backgroundColor: 'transparent',*/}
-            {/*        },*/}
-            {/*        iconContainer: {*/}
-            {/*            top: 5,*/}
-            {/*            right: 15,*/}
-            {/*        },*/}
-            {/*    }}*/}
-            {/*    value={gender.favSport3}*/}
-            {/*    useNativeAndroidPickerStyle={true}*/}
-            {/*    textInputProps={{underlineColorAndroid: 'cyan'}}*/}
-            {/*    Icon={() => {*/}
-            {/*        return <Chevron size={1.5} color="gray"/>;*/}
-            {/*    }}*/}
-            {/*/>*/}
-
-            <Dropdown data={myFavouriteActors} value={value}
+            <Dropdown data={values} value={value}
                       itemColor={'#3B84BE'}
                       baseColor={(color !== 'setting') ? '#ffffff' : '#014F80'}
-                      selectedItemColor={'#000000'} textColor={(color !== 'setting') ? '#ffffff' : '#014F80'}
+                      selectedItemColor={'#014F80'}
+                      textColor={(color !== 'setting') ? '#ffffff' : '#014F80'}
                       itemPadding={5}
-                      inputContainerStyle={{ borderBottomColor: 'transparent', paddingVertical: 0, margin: 0 }}
-                      containerStyle = {{padding: 0, margin: 0}}
+                      inputContainerStyle={{borderBottomColor: 'transparent', paddingVertical: 0, margin: 0}}
+                      containerStyle={{padding: 0, margin: 0}}
                       labelPadding={0}
                       useNativeDriver={true}
-                      onChangeText={(value)=>onChange(value)} />
+                      onChangeText={(value) => {
+                          onChange(value)
+                          getValidate();
+                      }}/>
 
         </View>
     );

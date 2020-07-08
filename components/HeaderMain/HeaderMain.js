@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, SafeAreaView  } from 'react-native';
-// import { SafeAreaView, useSafeArea  } from 'react-native-safe-area-context';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import IconMenu from '../../Icon/IconMenu';
-import MainLogo from '../../Icon/MainLogo';
+import MainLogoHeader from '../../Icon/MainLogoHeader';
 
 
 const styles = StyleSheet.create({
@@ -29,7 +28,6 @@ const styles = StyleSheet.create({
 });
 
 export default function HeaderMain({navigation}) {
-    // const insets = useSafeArea();
 
     return (
         <View style={styles.header}>
@@ -38,7 +36,7 @@ export default function HeaderMain({navigation}) {
                     <IconMenu />
                 </TouchableOpacity>
 
-                <MainLogo width={87} height={25}/>
+                <MainLogoHeader width={87} height={25}/>
             </View>
         </View>
     )

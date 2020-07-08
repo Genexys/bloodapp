@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import InputItemCalculate from '../components/InputItemCalculate/InputItemCalculate';
+import Dash from "react-native-dash";
 
 const styles = StyleSheet.create({
     containerInner: {
@@ -63,11 +64,26 @@ export default function ScreenCalculate({navigation}) {
 
     return (
         <View>
-            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} onPress={() => navigation.navigate('Результат')}>
+            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={styles.containerInner}>
-                    {analyzes.map((el, index) => <InputItemCalculate key={index} short={el[0]} long={el[1]}/>)}
+                    {analyzes.map((el, index) => {
+
+                        if (index % 5 === 5 - 1) {
+                            return (
+                                <View>
+                                    <InputItemCalculate key={index} short={el[0]} long={el[1]}/>
+                                    <Dash style={{width:'100%', height:1, opacity: 0.5, marginBottom: 20}} dashColor={'#014F80'}/>
+                                </View>
+
+                            )
+                        } else {
+                            return (
+                            <InputItemCalculate key={index} short={el[0]} long={el[1]}/>
+                            )
+                        }
+                    })}
                 </View>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Результат')}>
                     <Text style={styles.buttonText}>
                         Получить результат
                     </Text>

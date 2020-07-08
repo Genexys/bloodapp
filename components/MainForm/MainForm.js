@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
     },
 
     containerInput: {
@@ -37,24 +36,40 @@ function MainForm({navigation, typeForm, setUser, user}) {
     const [gender, setGender] = useState(user.gender);
     const [age, setAge] = useState(user.age);
     const [month, setMonth] = useState(user.month);
+    const [disableButton, setDisableButton] = useState(user.formButton);
+
+    const getValidate = () => {
+
+        if (gender !== '' && age !== '' && parseInt(age) <= 99  && month !== '' && parseInt(month) <= 12) {
+            setDisableButton(false)
+        } else {
+            setDisableButton(true)
+        }
+    }
 
     return (
         <View style={styles.container}>
-            <DropdownEl value={gender} onChange={setGender} color={typeForm}/>
+            <DropdownEl value={gender} onChange={setGender} getValidate={getValidate} color={typeForm}/>
 
             <View style={styles.containerInput}>
                 <View style={styles.containerAge}>
                     <Input type={'age'} placeholder={'Возраст'} color={typeForm} value={age}
-                           onChangeText={(val) => setAge(val)}/>
+                           onChangeText={(val) => {
+                               setAge(val)
+                               getValidate()
+                           }}/>
                 </View>
                 <View style={styles.containerMonth}>
                     <Input type={'month'} placeholder={'Мес'} color={typeForm} value={month}
-                           onChangeText={(val) => setMonth(val)}/>
+                           onChangeText={(val) => {
+                               setMonth(val)
+                               getValidate()
+                           }}/>
                 </View>
             </View>
 
-            {typeForm !== 'setting' ? <View style={styles.containerBtn}>
-                <ButtonMain onPress={() => {
+            {typeForm !== 'setting' && <View style={styles.containerBtn}>
+                <ButtonMain disableButton={disableButton} onPress={() => {
                     setUser({
                         gender,
                         age,
@@ -62,7 +77,7 @@ function MainForm({navigation, typeForm, setUser, user}) {
                     })
                     navigation.navigate('Форма расчета');
                 }} />
-            </View> : null}
+            </View>}
         </View>
     );
 }

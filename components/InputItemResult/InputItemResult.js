@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
+import ArrowDown from "../../Icon/ArrowDown";
+import ArrowUp from "../../Icon/ArrowUp";
 
 const styles = StyleSheet.create({
     container: {
@@ -31,6 +33,8 @@ const styles = StyleSheet.create({
 
     inputContainer: {
         flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
         marginLeft: 10,
         marginBottom: 30,
         borderBottomWidth: 1,
@@ -38,12 +42,13 @@ const styles = StyleSheet.create({
     },
 
     input: {
+        flex: 1,
         fontSize: 15,
         color: '#3B84BE'
     },
 });
 
-export default function InputItemResult({short, long}) {
+export default function InputItemResult({short, long, num}) {
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
@@ -53,8 +58,12 @@ export default function InputItemResult({short, long}) {
 
             <View style={styles.inputContainer}>
                 <Text style={styles.input}>
-                31,1
+                    {num}
                 </Text>
+                { num > 25 ?
+                    <ArrowDown width={10} height={9}/> :
+                    <ArrowUp width={10} height={9}/>
+                }
             </View>
         </View>
     );

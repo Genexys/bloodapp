@@ -19,9 +19,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default function ButtonMain({onPress}) {
+export default function ButtonMain({onPress, disableButton}) {
+
     return (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, {opacity: disableButton ? 1 : 1}]} disabled={disableButton} onPress={onPress}>
             <Text style={styles.buttonText}>
                 начать
             </Text>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Text, View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import MainLogo from '../Icon/MainLogo';
 import MainForm from '../components/MainForm/MainForm';
@@ -17,25 +17,33 @@ const style = StyleSheet.create({
     },
 
     containerInner: {
-        // alignItems: 'center',
         flex: 1
     },
 
-    formFrapper: {
-        alignItems: 'center'
+    formWrapper: {
+        flex: 1,
+        alignItems: 'center',
+    },
+
+    formInner: {
+        // marginTop: 20,
+        flex: 1,
     },
 
     buttonWrapper: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+
+    buttonInner: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#ffffff',
+        opacity: 0.5,
     },
 
     buttonText: {
         color: 'white',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ffffff',
         textAlign: 'center',
-        opacity: 0.5,
     },
 
     button: {
@@ -49,17 +57,19 @@ export default function MainScreen({navigation}) {
         <ScrollView contentContainerStyle={style.containerStyle} style={style.container}>
             <View style={style.containerInner}>
                 <View flex={1}/>
-                <View style={style.formFrapper}>
+                <View style={style.formWrapper}>
                     <MainLogo style={style.logo} width={164} height={53}/>
                     <MainForm navigation={navigation}/>
                 </View>
                 <View style={style.buttonWrapper} flex={1}>
-                    <TouchableOpacity
-                        style={style.button}
-                        onPress={() => navigation.navigate('Пользовательское соглашение')}
-                    >
-                        <Text style={style.buttonText}>Пользовательское соглашение</Text>
-                    </TouchableOpacity>
+                    <View style={style.buttonInner}>
+                        <TouchableOpacity
+                            style={style.button}
+                            onPress={() => navigation.navigate('Пользовательское соглашение')}
+                        >
+                            <Text style={style.buttonText}>Пользовательское соглашение</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </ScrollView>

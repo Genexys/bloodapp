@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {connect} from "react-redux";
+import {setUser as setUserAction} from '../redux/user/actions';
 import InputItemResult from '../components/InputItemResult/InputItemResult';
 import Dash from "react-native-dash";
+import { useFonts } from 'expo-font';
 
 const styles = StyleSheet.create({
     containerInner: {
@@ -10,8 +13,14 @@ const styles = StyleSheet.create({
         paddingLeft: 35,
     },
 
+    titleScreen: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#014F80'
+    },
+
     title: {
-        marginBottom: 20,
+        marginBottom: 10,
         fontSize: 20,
         fontWeight: 'bold',
         color: '#014F80'
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height: 123,
+        height: 80,
         marginTop: 10,
         backgroundColor: '#3B84BE',
         color: '#ffffff'
@@ -79,7 +88,12 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function ScreenResult() {
+function ScreenResult({navigation, user, setUser}) {
+
+    const [loaded] = useFonts({
+        Georgia: require('../assets/fonts/Georgia.ttf'),
+    });
+
     const analyzes = [
         ['HGW', 'гемоглобин'],
         ['RBC', 'эритроциты'],
@@ -106,16 +120,26 @@ export default function ScreenResult() {
         'ускоренном разрушении эритроцитов.'
     ];
 
+    if (!loaded) {
+        return null;
+    }
+
     return (
         <View>
             <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={styles.containerInner}>
-                    {analyzes.map((el, index) => <InputItemResult key={index} short={el[0]} long={el[1]}/>)}
+                    <Text style={[styles.titleScreen, { fontFamily: 'Georgia' }]}>Отклонения</Text>
+                    <Text style={styles.text}>для {user.gender}, {user.age} лет</Text>
                 </View>
-                <Dash style={{width: '100%', height: 1, opacity: 0.5}} dashColor={'#014F80'}/>
+
+
+                <View style={styles.containerInner}>
+                    {analyzes.map((el, index) => <InputItemResult key={index} short={el[0]} long={el[1]} num={Math.floor(Math.random() * 30)}/>)}
+                </View>
+                <Dash style={{width: '100%', height: 1, opacity: 0.5, marginBottom: 20}} dashColor={'#014F80'}/>
                 <View style={styles.containerInner}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.title}>
+                        <Text style={[styles.title, { fontFamily: 'Georgia' }]}>
                             Пояснения:
                         </Text>
                         <Text style={styles.text}>
@@ -127,7 +151,7 @@ export default function ScreenResult() {
                     </View>
 
                     <View style={styles.textContainer}>
-                        {list1.map(textItem => (<Text style={styles.text}>&ndash;{textItem}</Text>))}
+                        {list1.map((textItem, index) => (<Text key={index} style={styles.text}>&ndash;{textItem}</Text>))}
                         <View style={styles.markerWrapper}>
                             <View style={styles.wbc}>
                                 <Text style={styles.markerText}>
@@ -162,10 +186,20 @@ export default function ScreenResult() {
                             в крови наблюдается при:
 
                         </Text>
-                        {list2.map(textItem => (<Text style={styles.text}>&ndash;{textItem}</Text>))}
+                        {list2.map((textItem, index) => (<Text key={index} style={styles.text}>&ndash;{textItem}</Text>))}
                     </View>
                 </View>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => {
+                    setUser(
+                        {
+                            age: '',
+                            gender: '',
+                            month: ''
+                        }
+                    )
+
+                    navigation.navigate('Главная');
+                }}>
                     <Text style={styles.buttonText}>
                         начать заново
                     </Text>
@@ -174,3 +208,11 @@ export default function ScreenResult() {
         </View>
     );
 }
+
+const mapStateToProps = (state) => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps, {
+    setUser: setUserAction
+})(ScreenResult)
