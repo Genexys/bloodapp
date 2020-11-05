@@ -86,10 +86,8 @@ export default function SettingsScreen({ navigation }) {
             Настройки
           </Text>
 
-          <View style={style.formContainer}>
-            <Text style={style.formTitle}>Личные данные</Text>
-            <MainForm typeForm={"setting"} />
-          </View>
+          <Text style={style.formTitle}>Личные данные</Text>
+          <MainForm typeForm={"setting"} />
         </View>
         <Dash
           style={{ width: "100%", height: 1, opacity: 0.5 }}
