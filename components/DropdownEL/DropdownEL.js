@@ -12,7 +12,7 @@ export default function DropdownEl({ color, value, onChange, getValidate }) {
             value: 'Ребёнок'
         }, */ {
       label: 'Женщина',
-      value: 'Женщина',
+      value: 'female',
     },
     /*  {
             label: 'Женщина в положении',
@@ -20,7 +20,7 @@ export default function DropdownEl({ color, value, onChange, getValidate }) {
         }, */
     {
       label: 'Мужчина',
-      value: 'Мужчина',
+      value: 'male',
     },
   ]
 

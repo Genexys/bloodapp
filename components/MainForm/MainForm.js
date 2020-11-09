@@ -161,6 +161,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
               setUser({
                 gender,
                 birthDay,
+                formButton: disableButton,
               })
               navigation.navigate('Форма расчета')
             }}

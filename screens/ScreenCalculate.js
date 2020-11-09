@@ -1,8 +1,40 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import InputItemCalculate from '../components/InputItemCalculate/InputItemCalculate'
-import Dash from 'react-native-dash'
 import { FlatList } from 'react-native-gesture-handler'
+import { analyzesList, getResult } from '../analyzes'
+import store from '../redux/store'
+
+const getAge = () => {
+  const age = Date.now() - Date.parse(store.getState().user.birthDay.value)
+  const ageInDays = Math.floor(age / 86400000) // ammout of ms in 1 day
+  const ageInYears = Math.floor(ageInDays / 365) // ammout of days in 1 year
+  return { ageInYears, ageInDays }
+}
+
+export default function ScreenCalculate({ navigation }) {
+  console.warn(getAge())
+  const listOfValues = {}
+
+  return (
+    <>
+      <FlatList
+        data={analyzesList}
+        keyExtractor={item => item.label}
+        renderItem={({ item }) => {
+          return <InputItemCalculate listOfValues={listOfValues} short={item.label} long={item.name} />
+        }}
+        contentContainerStyle={styles.containerInner}
+      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('Результат', { result: getResult(listOfValues, getAge()) })}
+      >
+        <Text style={styles.buttonText}>Получить результат</Text>
+      </TouchableOpacity>
+    </>
+  )
+}
 
 const styles = StyleSheet.create({
   containerInner: {
@@ -29,54 +61,3 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
 })
-
-export default function ScreenCalculate({ navigation }) {
-  const analyzes = [
-    ['HGW', 'гемоглобин'],
-    ['RBC', 'эритроциты'],
-    ['WBC', 'лейкоциты'],
-    // ['HCT', 'гематокрит'],
-    // ['PLT', 'тромбоциты'],
-  ]
-
-  const ListFooterComponent = (
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Результат')}>
-      <Text style={styles.buttonText}>Получить результат</Text>
-    </TouchableOpacity>
-  )
-
-  return (
-    // <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-    //   <View style={styles.containerInner}>
-    //     {analyzes.map((el, index) => {
-    //       if (index % 5 === 5 - 1) {
-    //         return (
-    //           <View>
-    //             <InputItemCalculate key={index} short={el[0]} long={el[1]} />
-    //             <Dash style={{ width: '100%', height: 1, opacity: 0.5, marginBottom: 20 }} dashColor={'#014F80'} />
-    //           </View>
-    //         )
-    //       } else {
-    //         return <InputItemCalculate key={index} short={el[0]} long={el[1]} />
-    //       }
-    //     })}
-    //   </View>
-    //   <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Результат')}>
-    //     <Text style={styles.buttonText}>Получить результат</Text>
-    //   </TouchableOpacity>
-    // </ScrollView>
-    <>
-      <FlatList
-        data={analyzes}
-        keyExtractor={item => item[0]}
-        renderItem={({ item }) => {
-          return <InputItemCalculate short={item[0]} long={item[1]} />
-        }}
-        contentContainerStyle={styles.containerInner}
-      />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Результат')}>
-        <Text style={styles.buttonText}>Получить результат</Text>
-      </TouchableOpacity>
-    </>
-  )
-}
