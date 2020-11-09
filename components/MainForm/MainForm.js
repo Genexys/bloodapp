@@ -33,11 +33,9 @@ const styles = StyleSheet.create({
 
 function MainForm({ navigation, typeForm, setUser, user }) {
   const [gender, setGender] = useState(user.gender)
-  const [age, setAge] = useState(user.age)
-  const [month, setMonth] = useState(user.month)
   const [showDatePicker, setShowDatePicker] = useState(false)
-  const [birthDay, setBirthday] = useState('Дата рождения')
-  const [disableButton, setDisableButton] = useState(user.formButton)
+  const [birthDay, setBirthday] = useState(user.birthDay)
+  const [disableButton, setDisableButton] = useState(!user.formButton)
 
   const parseBirthDay = date => {
     const day = date.getDate()
@@ -51,7 +49,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
   let pickedDay = parseBirthDay(new Date())
 
   const getValidate = () => {
-    if (gender !== '' && birthDay !== 'Дата рождения') {
+    if (gender !== 'Выберите тип пациента' && birthDay.string !== 'Дата рождения') {
       setDisableButton(false)
     } else {
       setDisableButton(true)
@@ -60,7 +58,12 @@ function MainForm({ navigation, typeForm, setUser, user }) {
 
   return (
     <View style={styles.container}>
-      <DropdownEl value={gender} onChange={setGender} getValidate={getValidate} color={typeForm} />
+      <DropdownEl
+        value={gender ? gender : 'Выберите тип пациента'}
+        onChange={setGender}
+        getValidate={getValidate}
+        color={typeForm}
+      />
       {showDatePicker && (
         <View
           style={{
@@ -78,7 +81,8 @@ function MainForm({ navigation, typeForm, setUser, user }) {
             maximumDate={new Date()}
             textColor={typeForm === 'setting' ? '#ffffff' : '#014F80'}
             onChange={({ type, nativeEvent }) => {
-              pickedDay = parseBirthDay(new Date(nativeEvent.timestamp))
+              const date = new Date(nativeEvent.timestamp)
+              pickedDay = { string: parseBirthDay(date), value: date }
               if (type === 'set') {
                 setBirthday(pickedDay)
                 setShowDatePicker(false)
@@ -146,7 +150,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
           },
         ]}
       >
-        <Text style={[styles.text, { color: typeForm !== 'setting' ? '#ffffff' : '#014F80' }]}>{birthDay}</Text>
+        <Text style={[styles.text, { color: typeForm !== 'setting' ? '#ffffff' : '#014F80' }]}>{birthDay.string}</Text>
       </View>
 
       {typeForm !== 'setting' && (
@@ -156,8 +160,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
             onPress={() => {
               setUser({
                 gender,
-                age,
-                month,
+                birthDay,
               })
               navigation.navigate('Форма расчета')
             }}
