@@ -13,7 +13,6 @@ const getAge = () => {
 }
 
 export default function ScreenCalculate({ navigation }) {
-  console.warn(getAge())
   const listOfValues = {}
 
   return (

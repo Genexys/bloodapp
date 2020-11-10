@@ -30,8 +30,8 @@ const message = {
 }
 
 export const getWBCResult = (value, { ageInYears, ageInDays }) => {
-  const gender = ageInDays < 365 ? 'baby' : 'another'
-  const age = ageInDays < 365 ? ageInDays : ageInYears
+  const gender = ageInDays <= 365 ? 'baby' : 'another'
+  const age = ageInDays <= 365 ? ageInDays : ageInYears
   const referencesByGender = referenceValuesWBC[gender]
 
   const range = getReferenceRange(age, referencesByGender)

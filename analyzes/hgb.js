@@ -48,8 +48,8 @@ const message = {
 }
 
 export const getHGBResult = (value, { ageInYears, ageInDays }) => {
-  const gender = ageInDays < 365 ? 'baby' : store.getState().user.gender
-  const age = ageInDays < 365 ? ageInDays : ageInYears
+  const gender = ageInDays <= 365 ? 'baby' : store.getState().user.gender
+  const age = ageInDays <= 365 ? ageInDays : ageInYears
   const referencesByGender = referenceValuesHGB[gender]
 
   const range = getReferenceRange(age, referencesByGender)

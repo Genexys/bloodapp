@@ -5,7 +5,7 @@ import { getESRResult } from './esr'
 export const analyzesList = [
   { label: 'HGB', name: 'гемоглобин' },
   { label: 'WBC', name: 'лейкоциты' },
-  // { label: 'ESR', name: 'COЭ' },
+  { label: 'ESR', name: 'COЭ' },
   // { label: 'RBC', name: 'эритроциты' },
   // {label: 'HCT', name: 'гематокрит'},
   // {label: 'PLT', name: 'тромбоциты'},
@@ -29,7 +29,7 @@ export const getResult = (listOfValues, age) => {
 
 export const getReferenceRange = (age, references) => {
   for (const [key, value] of Object.entries(references)) {
-    if (age < key) {
+    if (age <= key) {
       return value
     }
   }
