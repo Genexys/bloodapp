@@ -5,6 +5,7 @@ import { setUser as setUserAction } from '../redux/user/actions'
 import InputItemResult from '../components/InputItemResult/InputItemResult'
 import Dash from 'react-native-dash'
 import { useFonts } from 'expo-font'
+import { AppLoading } from 'expo'
 
 function ScreenResult({ navigation, route, user, setUser }) {
   const { results } = route.params
@@ -40,7 +41,7 @@ function ScreenResult({ navigation, route, user, setUser }) {
   ]
 
   if (!loaded) {
-    return null
+    return <AppLoading />
   }
 
   return (
