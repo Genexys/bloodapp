@@ -1,6 +1,7 @@
 // Гемоглобин
 
 import store from '../redux/store'
+import { getReferenceRange, compareValues } from '.'
 
 const referenceValuesHGB = {
   baby: {
@@ -37,24 +38,6 @@ const referenceValuesHGB = {
     65: { min: 13.1, max: 17.2 },
     120: { min: 12.6, max: 17.4 },
   },
-}
-
-const getReferenceRange = (age, references) => {
-  for (const [key, value] of Object.entries(references)) {
-    if (age < key) {
-      return value
-    }
-  }
-}
-
-const compareValues = ({ min, max }, current) => {
-  if (current < min) {
-    return 'lowValue'
-  } else if (current > max) {
-    return 'highValue'
-  } else {
-    return 'normal'
-  }
 }
 
 const message = {

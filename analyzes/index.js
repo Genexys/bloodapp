@@ -26,3 +26,21 @@ export const getResult = (listOfValues, age) => {
   }
   return result
 }
+
+export const getReferenceRange = (age, references) => {
+  for (const [key, value] of Object.entries(references)) {
+    if (age < key) {
+      return value
+    }
+  }
+}
+
+export const compareValues = ({ min, max }, current) => {
+  if (current < min) {
+    return 'lowValue'
+  } else if (current > max) {
+    return 'highValue'
+  } else {
+    return 'normal'
+  }
+}
