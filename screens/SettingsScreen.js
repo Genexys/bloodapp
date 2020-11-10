@@ -14,7 +14,6 @@ const style = StyleSheet.create({
 
   container: {
     padding: 36,
-    flex: 1,
   },
 
   title: {
