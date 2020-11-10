@@ -38,6 +38,7 @@ export const getESRResult = (value, { ageInYears, ageInDays }) => {
   const status = compareValues(range, value)
 
   return {
+    name: 'СОЭ',
     range,
     currentValue: value,
     status,
