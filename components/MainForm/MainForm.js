@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { setUser as setUserAction } from '../../redux/user/actions'
@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
   },
 })
 
-function MainForm({ navigation, typeForm, setUser, user }) {
+function MainForm({ navigation, route, typeForm, setUser, user }) {
   const [gender, setGender] = useState(user.gender)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [birthDay, setBirthday] = useState(user.birthDay)
-  const [disableButton, setDisableButton] = useState(!user.formButton)
+  const [disableButton, setDisableButton] = useState(user.formButton)
 
   const parseBirthDay = date => {
     const day = date.getDate()
@@ -46,7 +46,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
     return `${dayFormat}.${monthFormat}.${date.getFullYear()}`
   }
 
-  let pickedDay = parseBirthDay(new Date())
+  let pickedDay = { string: parseBirthDay(new Date()), value: new Date() }
 
   const getValidate = () => {
     if (gender !== 'Выберите тип пациента' && birthDay.string !== 'Дата рождения') {
@@ -55,6 +55,14 @@ function MainForm({ navigation, typeForm, setUser, user }) {
       setDisableButton(true)
     }
   }
+
+  useEffect(() => {
+    setUser({
+      gender,
+      birthDay,
+      formButton: disableButton,
+    })
+  }, [gender, birthDay, disableButton])
 
   return (
     <View style={styles.container}>
@@ -87,9 +95,6 @@ function MainForm({ navigation, typeForm, setUser, user }) {
                 setBirthday(pickedDay)
                 setShowDatePicker(false)
                 getValidate()
-              } else {
-                Platform.OS !== 'ios' && setShowDatePicker(false)
-                getValidate()
               }
             }}
           />
@@ -107,6 +112,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
                   onPress={() => {
                     setBirthday(pickedDay)
                     setShowDatePicker(false)
+                    getValidate()
                   }}
                 >
                   <Text
@@ -158,11 +164,6 @@ function MainForm({ navigation, typeForm, setUser, user }) {
           <ButtonMain
             disableButton={disableButton}
             onPress={() => {
-              setUser({
-                gender,
-                birthDay,
-                formButton: disableButton,
-              })
               navigation.navigate('Форма расчета')
             }}
           />

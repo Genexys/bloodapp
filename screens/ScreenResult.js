@@ -113,13 +113,7 @@ function ScreenResult({ navigation, route, user, setUser }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            setUser({
-              age: '',
-              gender: '',
-              month: '',
-            })
-
-            navigation.navigate('Главная')
+            navigation.navigate('Главная', { restart: true })
           }}
         >
           <Text style={styles.buttonText}>начать заново</Text>
