@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, View, Text, Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { setUser as setUserAction } from '../../redux/user/actions'
@@ -6,6 +6,8 @@ import DropdownEl from '../DropdownEL/DropdownEL'
 import ButtonMain from '../ButtonMain/ButtonMain'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useFocusEffect } from '@react-navigation/native'
+import store from '../../redux/store'
 
 const styles = StyleSheet.create({
   container: {
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
   },
 })
 
-function MainForm({ navigation, route, typeForm, setUser, user }) {
+function MainForm({ navigation, typeForm, setUser, user }) {
   const [gender, setGender] = useState(user.gender)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [birthDay, setBirthday] = useState(user.birthDay)
@@ -63,6 +65,17 @@ function MainForm({ navigation, route, typeForm, setUser, user }) {
       formButton: disableButton,
     })
   }, [gender, birthDay, disableButton])
+
+  // Update profile if user was changed on settings screen
+  useFocusEffect(
+    useCallback(() => {
+      const { gender, birthDay, formButton } = store.getState().user
+
+      setGender(gender)
+      setBirthday(birthDay)
+      setDisableButton(formButton)
+    }, []),
+  )
 
   return (
     <View style={styles.container}>
