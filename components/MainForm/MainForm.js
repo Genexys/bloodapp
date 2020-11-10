@@ -1,37 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Platform } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { StyleSheet, View, Text, Platform, Modal } from 'react-native'
 import { connect } from 'react-redux'
 import { setUser as setUserAction } from '../../redux/user/actions'
 import DropdownEl from '../DropdownEL/DropdownEL'
 import ButtonMain from '../ButtonMain/ButtonMain'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useFocusEffect } from '@react-navigation/native'
+import store from '../../redux/store'
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-
-  containerAge: {
-    width: '100%',
-    borderBottomWidth: 1,
-    paddingBottom: 5,
-  },
-
-  text: {
-    fontSize: 15,
-    textAlign: 'left',
-  },
-
-  containerBtn: {
-    alignSelf: 'stretch',
-    marginTop: 50,
-  },
-})
-
-function MainForm({ navigation, route, typeForm, setUser, user }) {
+function MainForm({ navigation, typeForm, setUser, user }) {
   const [gender, setGender] = useState(user.gender)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [birthDay, setBirthday] = useState(user.birthDay)
@@ -64,6 +42,17 @@ function MainForm({ navigation, route, typeForm, setUser, user }) {
     })
   }, [gender, birthDay, disableButton])
 
+  // Update profile if user was changed on settings screen
+  useFocusEffect(
+    useCallback(() => {
+      const { gender, birthDay, formButton } = store.getState().user
+
+      setGender(gender)
+      setBirthday(birthDay)
+      setDisableButton(formButton)
+    }, []),
+  )
+
   return (
     <View style={styles.container}>
       <DropdownEl
@@ -72,81 +61,89 @@ function MainForm({ navigation, route, typeForm, setUser, user }) {
         getValidate={getValidate}
         color={typeForm}
       />
-      {showDatePicker && (
-        <View
-          style={{
-            zIndex: 2,
-            position: 'absolute',
-            width: '100%',
-            backgroundColor: typeForm !== 'setting' ? '#ffffff' : '#014F80',
-            borderRadius: 4,
-          }}
-        >
-          <DateTimePicker
-            value={new Date()}
-            mode={'date'}
-            minimumDate={new Date(1920, 0, 1)}
-            maximumDate={new Date()}
-            textColor={typeForm === 'setting' ? '#ffffff' : '#014F80'}
-            onChange={({ type, nativeEvent }) => {
-              const date = new Date(nativeEvent.timestamp)
-              pickedDay = { string: parseBirthDay(date), value: date }
-              if (type === 'set') {
-                setBirthday(pickedDay)
+
+      {Platform.OS !== 'ios' ? (
+        <>
+          {showDatePicker && (
+            <DateTimePicker
+              value={new Date()}
+              mode={'date'}
+              minimumDate={new Date(1920, 0, 1)}
+              maximumDate={new Date()}
+              textColor={typeForm === 'setting' ? '#ffffff' : '#014F80'}
+              onChange={({ type, nativeEvent }) => {
                 setShowDatePicker(false)
-                getValidate()
-              }
-            }}
-          />
-          {Platform.OS === 'ios' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                flex: 1,
-                paddingBottom: 5,
+                const date = new Date(nativeEvent.timestamp)
+                pickedDay = { string: parseBirthDay(date), value: date }
+                if (type === 'set') {
+                  setBirthday(pickedDay)
+                  getValidate()
+                }
               }}
-            >
-              <View style={{ flexGrow: 1 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setBirthday(pickedDay)
-                    setShowDatePicker(false)
-                    getValidate()
+            />
+          )}
+        </>
+      ) : (
+        <Modal animationType='slide' transparent={true} visible={showDatePicker}>
+          <>
+            <View style={styles.centeredView}>
+              <View style={[styles.iosModal, { backgroundColor: typeForm !== 'setting' ? '#ffffff' : '#014F80' }]}>
+                <DateTimePicker
+                  value={new Date()}
+                  mode={'date'}
+                  minimumDate={new Date(1920, 0, 1)}
+                  maximumDate={new Date()}
+                  textColor={typeForm === 'setting' ? '#ffffff' : '#014F80'}
+                  onChange={({ _type, nativeEvent }) => {
+                    const date = new Date(nativeEvent.timestamp)
+                    pickedDay = { string: parseBirthDay(date), value: date }
                   }}
-                >
-                  <Text
-                    style={{
-                      color: typeForm === 'setting' ? '#ffffff' : '#014F80',
-                      textAlign: 'center',
-                      fontSize: 20,
-                    }}
-                  >
-                    Сохранить
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{ flexGrow: 1 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setShowDatePicker(false)
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: typeForm === 'setting' ? '#ffffff' : '#014F80',
-                      textAlign: 'center',
-                      fontSize: 20,
-                    }}
-                  >
-                    Отменить
-                  </Text>
-                </TouchableOpacity>
+                />
+
+                <View style={styles.modalBtnContainer}>
+                  <View style={{ flexGrow: 1 }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setBirthday(pickedDay)
+                        setShowDatePicker(false)
+                        getValidate()
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: typeForm === 'setting' ? '#ffffff' : '#014F80',
+                          textAlign: 'center',
+                          fontSize: 20,
+                        }}
+                      >
+                        Сохранить
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{ flexGrow: 1 }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setShowDatePicker(false)
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: typeForm === 'setting' ? '#ffffff' : '#014F80',
+                          textAlign: 'center',
+                          fontSize: 20,
+                        }}
+                      >
+                        Отменить
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </View>
-          )}
-        </View>
+          </>
+        </Modal>
       )}
+
       <View
         onTouchStart={() => setShowDatePicker(true)}
         style={[
@@ -180,3 +177,45 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setUser: setUserAction,
 })(MainForm)
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+
+  containerAge: {
+    width: '100%',
+    borderBottomWidth: 1,
+    paddingBottom: 5,
+  },
+
+  text: {
+    fontSize: 15,
+    textAlign: 'left',
+  },
+
+  containerBtn: {
+    alignSelf: 'stretch',
+    marginTop: 50,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalBtnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flex: 1,
+    paddingBottom: 15,
+  },
+  iosModal: {
+    zIndex: 2,
+    position: 'absolute',
+    width: '100%',
+    borderRadius: 4,
+  },
+})

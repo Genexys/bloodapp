@@ -50,7 +50,7 @@ export default function ScreenCalculate({ navigation }) {
 
 const styles = StyleSheet.create({
   containerInner: {
-    paddingTop: 15,
+    paddingTop: 30,
     paddingRight: 35,
     paddingLeft: 35,
     flexGrow: 1,

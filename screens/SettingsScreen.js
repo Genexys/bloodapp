@@ -14,7 +14,6 @@ const style = StyleSheet.create({
 
   container: {
     padding: 36,
-    flex: 1,
   },
 
   title: {
@@ -64,8 +63,8 @@ const style = StyleSheet.create({
 })
 
 export default function SettingsScreen({ navigation }) {
-  const [darkTheme, setDarkThem] = useState(false)
-  const [unitValue, setUnitValue] = useState(null)
+  // const [darkTheme, setDarkThem] = useState(false)
+  // const [unitValue, setUnitValue] = useState(null)
   const [loaded] = useFonts({
     Georgia: require('../assets/fonts/Georgia.ttf'),
   })
