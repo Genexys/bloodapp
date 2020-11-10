@@ -28,7 +28,7 @@ export default function ScreenCalculate({ navigation }) {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Результат', { result: getResult(listOfValues, getAge()) })}
+        onPress={() => navigation.navigate('Результат', { results: getResult(listOfValues, getAge()) })}
       >
         <Text style={styles.buttonText}>Получить результат</Text>
       </TouchableOpacity>

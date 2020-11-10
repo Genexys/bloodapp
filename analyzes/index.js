@@ -4,7 +4,7 @@ import { getESRResult } from './esr'
 
 export const analyzesList = [
   { label: 'HGB', name: 'гемоглобин' },
-  // { label: 'WBC', name: 'лейкоциты' },
+  { label: 'WBC', name: 'лейкоциты' },
   // { label: 'ESR', name: 'COЭ' },
   // { label: 'RBC', name: 'эритроциты' },
   // {label: 'HCT', name: 'гематокрит'},

@@ -7,7 +7,8 @@ import Dash from 'react-native-dash'
 import { useFonts } from 'expo-font'
 
 function ScreenResult({ navigation, route, user, setUser }) {
-  const results = route.params
+  const { results } = route.params
+  // console.warn(results)
 
   const [loaded] = useFonts({
     Georgia: require('../assets/fonts/Georgia.ttf'),
