@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import InputItemCalculate from '../components/InputItemCalculate/InputItemCalculate'
 import { FlatList } from 'react-native-gesture-handler'
@@ -13,7 +13,12 @@ const getAge = () => {
 }
 
 export default function ScreenCalculate({ navigation }) {
+  const [isDisabled, setDisabled] = useState(true)
   const listOfValues = {}
+
+  const getValidate = () => {
+    Object.values(listOfValues).findIndex(value => value !== '') === -1 ? setDisabled(true) : setDisabled(false)
+  }
 
   return (
     <>
@@ -21,12 +26,20 @@ export default function ScreenCalculate({ navigation }) {
         data={analyzesList}
         keyExtractor={item => item.label}
         renderItem={({ item }) => {
-          return <InputItemCalculate listOfValues={listOfValues} short={item.label} long={item.name} />
+          return (
+            <InputItemCalculate
+              getValidate={getValidate}
+              listOfValues={listOfValues}
+              short={item.label}
+              long={item.name}
+            />
+          )
         }}
         contentContainerStyle={styles.containerInner}
       />
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { opacity: isDisabled ? 0.5 : 1 }]}
+        disabled={isDisabled}
         onPress={() => navigation.navigate('Результат', { results: getResult(listOfValues, getAge()) })}
       >
         <Text style={styles.buttonText}>Получить результат</Text>

@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function InputItemCalculate({ short, long, listOfValues }) {
+export default function InputItemCalculate({ short, long, listOfValues, getValidate }) {
   const [item, setValue] = useState({ short, value: '' })
 
   return (
@@ -62,6 +62,7 @@ export default function InputItemCalculate({ short, long, listOfValues }) {
           onChangeText={value => {
             setValue({ short, value })
             listOfValues[short] = value
+            getValidate()
           }}
         />
       </View>
