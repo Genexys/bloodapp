@@ -42,25 +42,27 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function InputItemCalculate({ short, long }) {
-  const [value, setValue] = useState('')
+export default function InputItemCalculate({ short, long, listOfValues, getValidate }) {
+  const [item, setValue] = useState({ short, value: '' })
 
   return (
     <View style={styles.container}>
-      <View style={[styles.textContainer, { borderBottomColor: value === '' ? '#3B84BE' : '#014F80' }]}>
-        <Text style={[styles.textBold, { color: value === '' ? '#3B84BE' : '#014F80' }]}>{short}</Text>
-        <Text style={[styles.textThin, { color: value === '' ? '#3B84BE' : '#014F80' }]}>{long}</Text>
+      <View style={[styles.textContainer, { borderBottomColor: item.value === '' ? '#3B84BE' : '#014F80' }]}>
+        <Text style={[styles.textBold, { color: item.value === '' ? '#3B84BE' : '#014F80' }]}>{short}</Text>
+        <Text style={[styles.textThin, { color: item.value === '' ? '#3B84BE' : '#014F80' }]}>{long}</Text>
       </View>
 
-      <View style={[styles.inputContainer, { borderBottomColor: value === '' ? '#3B84BE' : '#014F80' }]}>
+      <View style={[styles.inputContainer, { borderBottomColor: item.value === '' ? '#3B84BE' : '#014F80' }]}>
         <TextInput
-          placeholderTextColor={value === '' ? '#3B84BE' : '#014F80'}
-          placeholder={'0'}
+          placeholderTextColor={item.value === '' ? '#3B84BE' : '#014F80'}
+          placeholder={'-'}
           style={styles.input}
           keyboardType={'numeric'}
-          value={value}
+          value={item.value}
           onChangeText={value => {
-            setValue(value)
+            setValue({ short, value })
+            listOfValues[short] = value
+            getValidate()
           }}
         />
       </View>

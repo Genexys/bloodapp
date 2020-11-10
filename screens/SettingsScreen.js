@@ -4,6 +4,7 @@ import Dash from 'react-native-dash'
 import MainForm from '../components/MainForm/MainForm'
 import { useFonts } from 'expo-font'
 import ArrowNext from '../Icon/ArrowNext'
+import { AppLoading } from 'expo'
 
 const style = StyleSheet.create({
   containerWrapper: {
@@ -68,6 +69,10 @@ export default function SettingsScreen({ navigation }) {
   const [loaded] = useFonts({
     Georgia: require('../assets/fonts/Georgia.ttf'),
   })
+
+  if (!loaded) {
+    return <AppLoading />
+  }
 
   return (
     <ScrollView contentContainerStyle={style.containerWrapper} showsVerticalScrollIndicator={false}>
