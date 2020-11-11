@@ -1,14 +1,15 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { setUser as setUserAction } from '../redux/user/actions'
 import InputItemResult from '../components/InputItemResult/InputItemResult'
 import Dash from 'react-native-dash'
 import { useFonts } from 'expo-font'
 import { AppLoading } from 'expo'
+import { FlatList } from 'react-native-gesture-handler'
 
 function ScreenResult({ navigation, route, user }) {
-  const results = Object.entries(route.params.results)
+  const results = Object.entries(route.params.results).filter(analize => analize[1].status !== 'normal')
 
   const [loaded] = useFonts({
     Georgia: require('../assets/fonts/Georgia.ttf'),
@@ -16,84 +17,72 @@ function ScreenResult({ navigation, route, user }) {
 
   const userType = user.gender === 'male' ? 'Мужчина' : 'Женщина'
 
-  const isEverythingNormal = Object.values(route.params.results).findIndex(({ status }) => status !== 'normal') === -1
-
   if (!loaded) {
     return <AppLoading />
   }
 
   return (
-    <View>
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-        <View style={styles.containerInner}>
-          <Text style={[styles.titleScreen, { fontFamily: 'Georgia' }]}>Отклонения</Text>
-          <Text style={styles.text}>
-            Пациент: {userType}, дата рождения: {user.birthDay.string}
-          </Text>
-        </View>
+    <>
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponentStyle={styles.listHeaderContainer}
+        ListHeaderComponent={
+          <>
+            <View style={styles.listHeaderContainerInner}>
+              <Text style={[styles.titleScreen, { fontFamily: 'Georgia' }]}>Отклонения</Text>
+              <Text style={styles.text}>
+                Пациент: {userType}, дата рождения: {user.birthDay.string}
+              </Text>
+            </View>
 
-        <View style={styles.containerInner}>
-          {results.map(([label, result]) => {
-            if (result.status === 'normal') {
-              return null
-            }
-            return (
-              <InputItemResult
-                key={label}
-                short={label}
-                long={result.name}
-                status={result.status}
-                num={result.currentValue}
-              />
-            )
-          })}
-        </View>
-        <Dash style={{ width: '100%', height: 1, opacity: 0.5, marginBottom: 20 }} dashColor={'#014F80'} />
-        {isEverythingNormal ? (
+            <View style={styles.listHeaderContainerValue}>
+              {results.map(([label, result]) => (
+                <InputItemResult
+                  key={label}
+                  short={label}
+                  long={result.name}
+                  status={result.status}
+                  num={result.currentValue}
+                />
+              ))}
+            </View>
+            <Dash style={styles.dashHeader} dashColor={'#014F80'} />
+          </>
+        }
+        data={results}
+        keyExtractor={item => item[0]}
+        ListEmptyComponent={
           <View style={[styles.containerInner, { flexGrow: 1 }]}>
             <Text style={[styles.title, { fontFamily: 'Georgia' }]}>Все показатели в норме</Text>
           </View>
-        ) : (
+        }
+        renderItem={({ item: [label, result], index }) => (
           <>
             <View style={styles.containerInner}>
-              <Text style={[styles.title, { fontFamily: 'Georgia' }]}>Пояснения:</Text>
+              <View style={styles.textContainer}>
+                <View style={styles[result.status]}>
+                  <Text style={styles.markerText}>{label}</Text>
+                </View>
+                <Text style={styles.text}>
+                  <Text style={styles.textBold}>{`${result.name.toUpperCase()}\n`}</Text>
+                  <Text>{result.message}</Text>
+                </Text>
+              </View>
             </View>
-            {results.map(([label, result], index) => {
-              if (result.status === 'normal') {
-                return null
-              }
-
-              return (
-                <>
-                  <View style={styles.containerInner}>
-                    <View style={styles.textContainer}>
-                      <View style={styles[result.status]}>
-                        <Text style={styles.markerText}>{label}</Text>
-                      </View>
-                      <Text style={styles.text}>
-                        <Text style={styles.textBold}>{`${result.name.toUpperCase()}\n`}</Text>
-                        <Text>{result.message}</Text>
-                      </Text>
-                    </View>
-                  </View>
-                  {index !== results.length - 1 && (
-                    <Dash style={{ width: '100%', height: 1, opacity: 0.5, marginBottom: 20 }} dashColor={'#014F80'} />
-                  )}
-                </>
-              )
-            })}
+            {index !== results.length - 1 && <Dash style={styles.dashComment} dashColor={'#014F80'} />}
           </>
         )}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            navigation.navigate('Главная')
-          }}
-        >
-          <Text style={styles.buttonText}>начать заново</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate('Главная')
+        }}
+      >
+        <Text style={styles.buttonText}>начать заново</Text>
+      </TouchableOpacity>
+    </>
   )
 }
 
@@ -106,6 +95,18 @@ export default connect(mapStateToProps, {
 })(ScreenResult)
 
 const styles = StyleSheet.create({
+  listHeaderContainer: {
+    paddingTop: 15,
+  },
+  listHeaderContainerInner: {
+    paddingHorizontal: 35,
+  },
+  listHeaderContainerValue: {
+    paddingTop: 15,
+    paddingHorizontal: 35,
+  },
+  dashHeader: { width: '100%', height: 1, opacity: 0.5, marginBottom: 20, paddingTop: 15 },
+  dashComment: { width: '100%', height: 1, opacity: 0.5, marginBottom: 20 },
   containerInner: {
     paddingTop: 15,
     paddingRight: 35,
