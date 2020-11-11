@@ -4,6 +4,8 @@ import InputItemCalculate from '../components/InputItemCalculate/InputItemCalcul
 import { FlatList } from 'react-native-gesture-handler'
 import { analyzesList, getResult } from '../analyzes'
 import store from '../redux/store'
+import { connect } from 'react-redux'
+import { setUser as setUserAction, setUser } from '../redux/user/actions'
 
 const getAge = () => {
   const age = Date.now() - Date.parse(store.getState().user.birthDay.value)
@@ -12,9 +14,9 @@ const getAge = () => {
   return { ageInYears, ageInDays }
 }
 
-export default function ScreenCalculate({ navigation }) {
+function ScreenCalculate({ navigation, setUser }) {
   const [isDisabled, setDisabled] = useState(true)
-  const listOfValues = {}
+  const [listOfValues] = useState({})
 
   const getValidate = () => {
     Object.values(listOfValues).findIndex(value => value !== '') === -1 ? setDisabled(true) : setDisabled(false)
@@ -40,13 +42,24 @@ export default function ScreenCalculate({ navigation }) {
       <TouchableOpacity
         style={[styles.button, { opacity: isDisabled ? 0.5 : 1 }]}
         disabled={isDisabled}
-        onPress={() => navigation.navigate('Результат', { results: getResult(listOfValues, getAge()) })}
+        onPress={() => {
+          setUser({ lastResult: getResult(listOfValues, getAge()) })
+          navigation.navigate('Результат' /* { results: getResult(listOfValues, getAge()) } */)
+        }}
       >
         <Text style={styles.buttonText}>Получить результат</Text>
       </TouchableOpacity>
     </>
   )
 }
+
+const mapStateToProps = state => ({
+  user: state.user,
+})
+
+export default connect(mapStateToProps, {
+  setUser: setUserAction,
+})(ScreenCalculate)
 
 const styles = StyleSheet.create({
   containerInner: {

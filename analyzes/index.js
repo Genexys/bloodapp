@@ -19,6 +19,7 @@ const mapCalculate = {
 
 export const getResult = (listOfValues, age) => {
   const result = {}
+
   for (const [key, value] of Object.entries(listOfValues)) {
     if (value !== '') {
       result[key] = mapCalculate[key](value, age)

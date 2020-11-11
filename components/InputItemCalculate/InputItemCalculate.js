@@ -55,13 +55,13 @@ export default function InputItemCalculate({ short, long, listOfValues, getValid
       <View style={[styles.inputContainer, { borderBottomColor: item.value === '' ? '#3B84BE' : '#014F80' }]}>
         <TextInput
           placeholderTextColor={item.value === '' ? '#3B84BE' : '#014F80'}
-          placeholder={'-'}
+          placeholder={'0'}
           style={styles.input}
           keyboardType={'numeric'}
           value={item.value}
           onChangeText={value => {
             setValue({ short, value })
-            listOfValues[short] = value
+            listOfValues[short] = value === '' ? '' : Number(value)
             getValidate()
           }}
         />

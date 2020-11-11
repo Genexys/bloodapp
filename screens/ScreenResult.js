@@ -8,8 +8,8 @@ import { useFonts } from 'expo-font'
 import { AppLoading } from 'expo'
 import { FlatList } from 'react-native-gesture-handler'
 
-function ScreenResult({ navigation, route, user }) {
-  const results = Object.entries(route.params.results).filter(analize => analize[1].status !== 'normal')
+function ScreenResult({ navigation, user }) {
+  const results = Object.entries(user.lastResult).filter(analize => analize[1].status !== 'normal')
 
   const [loaded] = useFonts({
     Georgia: require('../assets/fonts/Georgia.ttf'),

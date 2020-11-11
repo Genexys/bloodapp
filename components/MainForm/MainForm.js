@@ -66,7 +66,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
         <>
           {showDatePicker && (
             <DateTimePicker
-              value={birthDay.value ? birthDay.value : new Date()}
+              value={birthDay.value ? new Date(birthDay.value) : new Date()}
               mode={'date'}
               minimumDate={new Date(1920, 0, 1)}
               maximumDate={new Date()}
@@ -89,7 +89,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
             <View style={styles.centeredView}>
               <View style={[styles.iosModal, { backgroundColor: typeForm !== 'setting' ? '#ffffff' : '#014F80' }]}>
                 <DateTimePicker
-                  value={birthDay.value ? birthDay.value : new Date()}
+                  value={birthDay.value ? new Date(birthDay.value) : new Date()}
                   mode={'date'}
                   minimumDate={new Date(1920, 0, 1)}
                   maximumDate={new Date()}
