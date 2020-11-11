@@ -44,3 +44,6 @@ export const compareValues = ({ min, max }, current) => {
     return 'normal'
   }
 }
+
+export const exceptionMessage =
+  'Введённое значение находится за пределами анализируемых показателей, перепроверьте данные или проконсультируйтесь с врачом'
