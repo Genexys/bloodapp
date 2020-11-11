@@ -26,7 +26,7 @@ const message = {
   lowValue:
     'Понижение уровня лейкоцитов может говорить о вирусных инфекциях, встречается при некоторых бактериальных инфекциях',
   normal: 'Показатели в норме',
-  highValue: 'Повышение уровня лейкоцитов может говорить о воспаление, бактериальной инфекции',
+  highValue: 'Повышение уровня лейкоцитов может говорить о воспалении, бактериальной инфекции',
 }
 
 export const getWBCResult = (value, { ageInYears, ageInDays }) => {
@@ -38,6 +38,7 @@ export const getWBCResult = (value, { ageInYears, ageInDays }) => {
   const status = compareValues(range, value)
 
   return {
+    name: 'лейкоциты',
     range,
     currentValue: value,
     status,

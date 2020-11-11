@@ -1,6 +1,6 @@
 // Скорость оседания эритроцитов СОЭ
 import store from '../redux/store'
-import { getReferenceRange, compareValues } from '.'
+import { getReferenceRange, compareValues, exceptionMessage } from '.'
 
 const referenceValuesESR = {
   baby: {
@@ -24,7 +24,7 @@ const referenceValuesESR = {
 }
 
 const message = {
-  lowValue: '',
+  lowValue: exceptionMessage,
   normal: 'Показатели в норме',
   highValue: 'Повышение скорости оседания эритроцитов может быть в следствии воспаления, инфекционных заболеваний',
 }
@@ -38,6 +38,7 @@ export const getESRResult = (value, { ageInYears, ageInDays }) => {
   const status = compareValues(range, value)
 
   return {
+    name: 'СОЭ',
     range,
     currentValue: value,
     status,

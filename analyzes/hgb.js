@@ -56,6 +56,7 @@ export const getHGBResult = (value, { ageInYears, ageInDays }) => {
   const status = compareValues(range, value)
 
   return {
+    name: 'гемоглобин',
     range,
     currentValue: value,
     status,

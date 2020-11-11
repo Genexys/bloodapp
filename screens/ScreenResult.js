@@ -1,125 +1,88 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { setUser as setUserAction } from '../redux/user/actions'
 import InputItemResult from '../components/InputItemResult/InputItemResult'
 import Dash from 'react-native-dash'
 import { useFonts } from 'expo-font'
 import { AppLoading } from 'expo'
+import { FlatList } from 'react-native-gesture-handler'
 
-function ScreenResult({ navigation, route, user, setUser }) {
-  const { results } = route.params
-  // console.warn(results)
+function ScreenResult({ navigation, route, user }) {
+  const results = Object.entries(route.params.results).filter(analize => analize[1].status !== 'normal')
 
   const [loaded] = useFonts({
     Georgia: require('../assets/fonts/Georgia.ttf'),
   })
 
-  const analyzes = [
-    ['HGW', 'гемоглобин'],
-    ['RBC', 'эритроциты'],
-    ['WBC', 'лейкоциты'],
-    ['HCT', 'гематокрит'],
-    ['PLT', 'тромбоциты'],
-  ]
-
-  const list1 = [
-    'Увеличение (лейкоцитоз) бывает при:',
-    'острых воспалительных процессах; гнойных процессах, сепсисе;',
-    'многих инфекционных заболеваниях вирусной, бактериальной, грибковой и другой этиологии;',
-    'злокачественных новообразованиях;',
-    'инфаркте миокарда;',
-  ]
-
-  const list2 = [
-    'кровопотере;',
-    'анемии;',
-    'гидремия(внутривенное введение большого количества жидкости);',
-    'при оттоке тканевой жидкости в кровеносное русло при уменьшении отеков(терапия мочегонными препаратами);',
-    'снижении интенсивности образования эритроцитов в костном мозге;',
-    'ускоренном разрушении эритроцитов.',
-  ]
+  const userType = user.gender === 'male' ? 'Мужчина' : 'Женщина'
 
   if (!loaded) {
     return <AppLoading />
   }
 
   return (
-    <View>
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-        <View style={styles.containerInner}>
-          <Text style={[styles.titleScreen, { fontFamily: 'Georgia' }]}>Отклонения</Text>
-          <Text style={styles.text}>
-            для {user.gender}, {user.age} лет
-          </Text>
-        </View>
-
-        <View style={styles.containerInner}>
-          {analyzes.map((el, index) => (
-            <InputItemResult key={index} short={el[0]} long={el[1]} num={Math.floor(Math.random() * 30)} />
-          ))}
-        </View>
-        <Dash style={{ width: '100%', height: 1, opacity: 0.5, marginBottom: 20 }} dashColor={'#014F80'} />
-        <View style={styles.containerInner}>
-          <View style={styles.textContainer}>
-            <Text style={[styles.title, { fontFamily: 'Georgia' }]}>Пояснения:</Text>
-            <Text style={styles.text}>
-              <Text style={styles.textBold}>Лейкоциты</Text>
-              <Text>
-                {' '}
-                WBC— клетки крови, Основной функцией лейкоцитов является защита организма от чужих для него антигенов (в
-                том числе, микроорганизмов, опухолевых клеток; эффект проявляется и в направлении клеток трансплантата).
+    <>
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponentStyle={styles.listHeaderContainer}
+        ListHeaderComponent={
+          <>
+            <View style={styles.listHeaderContainerInner}>
+              <Text style={[styles.titleScreen, { fontFamily: 'Georgia' }]}>Отклонения</Text>
+              <Text style={styles.text}>
+                Пациент: {userType}, дата рождения: {user.birthDay.string}
               </Text>
-            </Text>
+            </View>
+
+            <View style={styles.listHeaderContainerValue}>
+              {results.map(([label, result]) => (
+                <InputItemResult
+                  key={label}
+                  short={label}
+                  long={result.name}
+                  status={result.status}
+                  num={result.currentValue}
+                />
+              ))}
+            </View>
+            <Dash style={styles.dashHeader} dashColor={'#014F80'} />
+          </>
+        }
+        data={results}
+        keyExtractor={item => item[0]}
+        ListEmptyComponent={
+          <View style={[styles.containerInner, { flexGrow: 1 }]}>
+            <Text style={[styles.title, { fontFamily: 'Georgia' }]}>Все показатели в норме</Text>
           </View>
-
-          <View style={styles.textContainer}>
-            {list1.map((textItem, index) => (
-              <Text key={index} style={styles.text}>
-                &ndash;{textItem}
-              </Text>
-            ))}
-            <View style={styles.markerWrapper}>
-              <View style={styles.wbc}>
-                <Text style={styles.markerText}>WBC</Text>
-              </View>
-              <View style={styles.hct}>
-                <Text style={styles.markerText}>HCT</Text>
+        }
+        renderItem={({ item: [label, result], index }) => (
+          <>
+            <View style={styles.containerInner}>
+              <View style={styles.textContainer}>
+                <View style={styles[result.status]}>
+                  <Text style={styles.markerText}>{label}</Text>
+                </View>
+                <Text style={styles.text}>
+                  <Text style={styles.textBold}>{`${result.name.toUpperCase()}\n`}</Text>
+                  <Text>{result.message}</Text>
+                </Text>
               </View>
             </View>
-            <Text style={styles.text}>– после больших физических нагрузок.</Text>
-          </View>
-        </View>
-
-        <Dash style={{ width: '100%', height: 1, opacity: 0.5, marginBottom: 20 }} dashColor={'#014F80'} />
-
-        <View style={styles.containerInner}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>
-              Эритроциты RBC клетки, которые участвуют в транспорте кислорода в ткани и поддерживают в организме
-              процессы биологического окисления.
-            </Text>
-          </View>
-
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Уменьшение содержания эритроцитов в крови наблюдается при:</Text>
-            {list2.map((textItem, index) => (
-              <Text key={index} style={styles.text}>
-                &ndash;{textItem}
-              </Text>
-            ))}
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            navigation.navigate('Главная', { restart: true })
-          }}
-        >
-          <Text style={styles.buttonText}>начать заново</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+            {index !== results.length - 1 && <Dash style={styles.dashComment} dashColor={'#014F80'} />}
+          </>
+        )}
+      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate('Главная')
+        }}
+      >
+        <Text style={styles.buttonText}>начать заново</Text>
+      </TouchableOpacity>
+    </>
   )
 }
 
@@ -132,6 +95,18 @@ export default connect(mapStateToProps, {
 })(ScreenResult)
 
 const styles = StyleSheet.create({
+  listHeaderContainer: {
+    paddingTop: 15,
+  },
+  listHeaderContainerInner: {
+    paddingHorizontal: 35,
+  },
+  listHeaderContainerValue: {
+    paddingTop: 15,
+    paddingHorizontal: 35,
+  },
+  dashHeader: { width: '100%', height: 1, opacity: 0.5, marginBottom: 20, paddingTop: 15 },
+  dashComment: { width: '100%', height: 1, opacity: 0.5, marginBottom: 20 },
   containerInner: {
     paddingTop: 15,
     paddingRight: 35,
@@ -170,7 +145,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  wbc: {
+  highValue: {
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 5,
@@ -181,7 +156,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
 
-  hct: {
+  lowValue: {
     justifyContent: 'center',
     alignItems: 'center',
     width: 52,
