@@ -61,7 +61,7 @@ export default function InputItemCalculate({ short, long, listOfValues, getValid
           value={item.value}
           onChangeText={value => {
             setValue({ short, value })
-            listOfValues[short] = value
+            listOfValues[short] = value === '' ? '' : Number(value)
             getValidate()
           }}
         />

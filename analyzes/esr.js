@@ -1,6 +1,6 @@
 // Скорость оседания эритроцитов СОЭ
 import store from '../redux/store'
-import { getReferenceRange, compareValues, exceptionMessage } from './index'
+import { getReferenceRange, compareValues, exceptionMessage } from './'
 
 const referenceValuesESR = {
   baby: {

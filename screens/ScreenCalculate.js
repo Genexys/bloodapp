@@ -16,7 +16,7 @@ const getAge = () => {
 
 function ScreenCalculate({ navigation, setUser }) {
   const [isDisabled, setDisabled] = useState(true)
-  const listOfValues = {}
+  const [listOfValues] = useState({})
 
   const getValidate = () => {
     Object.values(listOfValues).findIndex(value => value !== '') === -1 ? setDisabled(true) : setDisabled(false)
