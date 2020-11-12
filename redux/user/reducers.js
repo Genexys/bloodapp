@@ -3,7 +3,7 @@ import { SET_USER } from './constants'
 const defaultState = {
   gender: '',
   birthDay: { string: 'Дата рождения', value: null },
-  formButton: false,
+  formButton: true,
 }
 
 export default (state = defaultState, action) => {
