@@ -12,7 +12,7 @@ import store from '../../redux/store'
 function MainForm({ navigation, typeForm, setUser, user }) {
   const [gender, setGender] = useState(user.gender)
   const [showDatePicker, setShowDatePicker] = useState(false)
-  const [birthDay, setBirthday] = useState(user.birthDay)
+  const [birthDay, setBirthday] = useState(user.birthDay || { string: 'Дата рождения', value: null })
   const [disableButton, setDisableButton] = useState(user.formButton)
 
   const parseBirthDay = date => {
@@ -50,6 +50,7 @@ function MainForm({ navigation, typeForm, setUser, user }) {
       setGender(gender)
       setBirthday(birthDay)
       setDisableButton(formButton)
+      getValidate()
     }, []),
   )
 
