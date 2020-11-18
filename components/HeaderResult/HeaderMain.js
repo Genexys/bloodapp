@@ -20,8 +20,8 @@ const getMessage = user => {
 
   const resultMessage = result.reduce((acc, [label, result]) => {
     return `${acc}${label} ${result.name}\n${
-      result.status === 'lowValue' ? 'Показатель понижен' : 'Показатель понижен'
-    }\n\n${result.message}\n\n`
+      result.status === 'lowValue' ? 'Показатель понижен' : 'Показатель повышен'
+    }: ${result.currentValue}\n\n${result.message}\n\n`
   }, '')
 
   return {
